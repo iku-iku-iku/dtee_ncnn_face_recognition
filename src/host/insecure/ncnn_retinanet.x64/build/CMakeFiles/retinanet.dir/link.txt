@@ -1,0 +1,1 @@
+/usr/bin/c++ -g -rdynamic CMakeFiles/retinanet.dir/retinanet.cpp.o -o retinanet  /media/code4love/d30f2d95-206e-43a6-94b8-40bd7e385fa3/home/code4love/PROGRAM/MyCODE/ncnn_retinanet/libncnn.a 

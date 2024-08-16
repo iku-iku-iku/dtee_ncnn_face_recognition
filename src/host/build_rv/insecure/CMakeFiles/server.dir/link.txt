@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/server.dir/server.cpp.o CMakeFiles/server.dir/img_receiver.cpp.o  -o server  ../secure/libsecure.a -ldistributed_tee -lfastrtps -lfastcdr /usr/local/lib/libfoonathan_memory-0.7.3.a -lrt ../../secure/secure_lib/riscv64/libtensorflow-lite.a -latomic 

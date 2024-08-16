@@ -1,0 +1,2 @@
+/usr/bin/ar qc libsecure.a  CMakeFiles/secure.dir/embedding.cpp.o
+/usr/bin/ranlib libsecure.a

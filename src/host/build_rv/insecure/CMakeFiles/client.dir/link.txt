@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/client.dir/client.cpp.o CMakeFiles/client.dir/img_receiver.cpp.o  -o client  ncnn_retinanet/libretinanet.a ../secure/libsecure.a -ldistributed_tee -lfastrtps -lfastcdr /usr/local/lib/libfoonathan_memory-0.7.3.a -lrt ../../insecure/ncnn_retinanet/libncnn.a -lpthread ../../secure/secure_lib/riscv64/libtensorflow-lite.a -latomic 

@@ -1,0 +1,51 @@
+
+OUTPUT_ARCH( "riscv" )
+ENTRY(_start)
+
+
+SECTIONS 
+{
+  . = 0x00001000;
+  .text : {
+    *(.text._start)
+    *(.text)
+  }
+  . = ALIGN(0x1000);
+  .rodata : 
+  { 
+    *(.rdata)
+    *(.rodata)
+  }
+  .data : {
+    *(.data) 
+  }
+  .bss : { 
+    *(.bss)
+  }
+  .init_array : {
+    __init_array_start = .;
+    KEEP(*(SORT(.init_array.*)))
+    KEEP(*(.init_array))
+    __init_array_end = .;
+  }
+  . = ALIGN(0x1000);
+  .debug : { *(.debug) }
+
+  . = ALIGN(0x1000);
+  .brk_area :
+  {
+    __brk_start0 = .;
+    . = . + 1024 * 1024 * 10;
+    __brk_end = .;
+  }
+
+  . = ALIGN(0x1000);
+  .mmap_area :
+  {
+    __mmap_start0 = .;
+    . = . + 1024 * 1024 * 200;
+    __mmap_end = .;
+  }
+  _end = .;
+}
+

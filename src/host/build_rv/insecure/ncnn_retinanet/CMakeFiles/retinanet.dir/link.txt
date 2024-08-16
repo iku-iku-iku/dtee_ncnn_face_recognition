@@ -1,0 +1,2 @@
+/usr/bin/ar qc libretinanet.a  CMakeFiles/retinanet.dir/retinanet.cpp.o
+/usr/bin/ranlib libretinanet.a

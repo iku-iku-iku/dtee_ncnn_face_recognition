@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/workspace/insecure/img_receiver.cpp
+img_receiver.h
+/workspace/insecure/img_receiver.h
+filesystem
+-
+fstream
+-
+regex
+-
+
+/workspace/insecure/img_receiver.h
+../secure/embedding.h
+/workspace/secure/embedding.h
+array
+-
+
+/workspace/insecure/server.cpp
+TEE-Capability/dtee_sdk.h
+/workspace/insecure/TEE-Capability/dtee_sdk.h
+img_receiver.h
+/workspace/insecure/img_receiver.h
+
+/workspace/secure/embedding.h
+
