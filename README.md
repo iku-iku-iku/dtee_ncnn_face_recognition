@@ -95,3 +95,33 @@ cp libpenglai_0.so /lib64
 ./client verify ../faces/trump2.jpg # verify that the first person's id is 1
 ./client verify ../faces/biden2.jpg # verify that the first person's id is 2
 ```
+
+## Distributed Running
+
+After completing the steps above, you can test the distributed execution by following these steps:
+
+```sh
+cp openEuler-23.03-V1-base-qemu-preview.qcow2 openEuler-23.03-V1-base-qemu-preview2.qcow2
+sudo bash scripts/setup.sh
+```
+
+#### server
+
+```sh
+sudo bash scripts/start_client.sh
+cd ~/penglai-enclave-driver
+insmod penglai.ko
+cd ~/build
+./server
+```
+
+#### client
+
+```sh
+sudo bash scripts/start_server.sh
+cd ~/build
+./client record ../faces/trump1.jpg 1 # record first person with id 1
+./client record ../faces/biden1.jpg 2 # record second person with id 2
+./client verify ../faces/trump2.jpg # verify that the first person's id is 1
+./client verify ../faces/biden2.jpg # verify that the first person's id is 2
+```
