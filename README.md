@@ -8,6 +8,7 @@ This project implements Distributed Face Recognition within the Penglai enclave.
 
 ```sh
 git clone git@github.com:iku-iku-iku/dtee_ncnn_face_recognition.git
+cd dtee_ncnn_face_recognition
 make
 ```
 
@@ -22,10 +23,8 @@ wget https://ipads.se.sjtu.edu.cn:1313/f/26b1de6d2d1f463aa321/?dl=1 -O RISCV_VIR
 ### 3. Build u-boot and opensbi
 
 ```sh
-git clone https://github.com/Penglai-Enclave/Penglai-Enclave-sPMP.git
-cd PengLai-Enclave-sPMP
-# increase untrusted memory size
-sed -i '/#define DEFAULT_UNTRUSTED_SIZE/c\#define DEFAULT_UNTRUSTED_SIZE 512*1024' penglai-enclave-driver/penglai-config.h
+git clone https://github.com/iku-iku-iku/Penglai-Enclave-sPMP.git
+cd Penglai-Enclave-sPMP
 # build u-boot
 git submodule update --init --recursive
 ./docker_cmd.sh docker
@@ -48,7 +47,7 @@ qemu-system-riscv64 \
 -device virtio-vga -device virtio-rng-device,rng=rng0 \
 -drive file=./RISCV_VIRT.fd,if=pflash,format=raw,unit=1 \
 -device virtio-blk-device,drive=hd0 \
--drive file=./openEuler-23.03-V1-base-qemu-uefi.qcow2,format=qcow2,id=hd0 \
+-drive file=./openEuler-23.03-V1-base-qemu-preview.qcow2,format=qcow2,id=hd0 \
 -device virtio-net-device,netdev=usernet -netdev user,id=usernet,hostfwd=tcp::12055-:22 -device qemu-xhci -usb -device usb-kbd -device usb-tablet
 
 # username: root
@@ -59,10 +58,13 @@ qemu-system-riscv64 \
 
 ```sh
 # In host
+cd Penglai-Enclave-sPMP
 scp -P 12055 -r penglai-enclave-driver root@localhost:~/
+cd ..
 # In qemu
 dnf install -y kernel-devel kernel-source
 cd ~/penglai-enclave-driver
+sed -i '/#define DEFAULT_UNTRUSTED_SIZE/c\#define DEFAULT_UNTRUSTED_SIZE 512*1024' penglai-config.h
 sed -i 's|make -C ../openeuler-kernel/ ARCH=riscv M=$(PWD) modules|make -C /usr/lib/modules/$(shell uname -r)/build ARCH=riscv M=$(PWD) modules|' Makefile > /dev/null 2>&1
 sed -i '/^obj-m/a CFLAGS_MODULE += -fno-stack-protector' Makefile > /dev/null 2>&1
 make -j$(nproc)
@@ -86,7 +88,7 @@ scp -P 12055 -r build/ faces/ root@localhost:~/
 ### 7. Run The App
 
 ```sh
-cd build
+cd ~/build
 cp libpenglai_0.so /lib64
 ./client record ../faces/trump1.jpg 1 # record first person with id 1
 ./client record ../faces/biden1.jpg 2 # record second person with id 2
