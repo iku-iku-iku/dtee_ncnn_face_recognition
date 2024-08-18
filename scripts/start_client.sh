@@ -18,5 +18,5 @@ qemu-system-riscv64 \
 -drive file=./RISCV_VIRT.fd,if=pflash,format=raw,unit=1 \
 -device virtio-blk-device,drive=hd0 \
 -drive file=./openEuler-23.03-V1-base-qemu-preview2.qcow2,format=qcow2,id=hd0 \
--netdev tap,id=net0,ifname=$TAP,script=no,downscript=no -device virtio-net-device,netdev=net0,mac=52:54:00:12:34:57
+-netdev tap,id=net0,ifname=$TAP,script=no,downscript=no -device virtio-net-device,netdev=net0,mac=52:54:00:11:34:58
 

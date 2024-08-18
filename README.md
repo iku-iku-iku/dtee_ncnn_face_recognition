@@ -111,13 +111,14 @@ sudo bash scripts/setup.sh
 sudo bash scripts/start_client.sh
 
 # in qemu
-sudo ip addr add 192.168.1.151/24 dev eth0
-sudo ip route add default via 192.168.1.1
+ip addr add 192.168.1.151/24 dev eth0
+ip link set eth0 up
+ip route add default via 192.168.1.1 dev eth0
 
 cd ~/penglai-enclave-driver
 insmod penglai.ko
 cd ~/build
-./server
+./compute_node
 ```
 
 #### client
@@ -126,8 +127,9 @@ cd ~/build
 sudo bash scripts/start_server.sh
 
 # in qemu
-sudo ip addr add 192.168.1.152/24 dev eth0
-sudo ip route add default via 192.168.1.1
+ip addr add 192.168.1.152/24 dev eth0
+ip link set eth0 up
+ip route add default via 192.168.1.1 dev eth0
 
 cd ~/build
 ./client record ../faces/trump1.jpg 1 # record first person with id 1
