@@ -93,7 +93,7 @@ cp libpenglai_0.so /lib64
 ./client record ../faces/trump1.jpg 1 # record first person with id 1
 ./client record ../faces/biden1.jpg 2 # record second person with id 2
 ./client verify ../faces/trump2.jpg # verify that the first person's id is 1
-./client verify ../faces/biden2.jpg # verify that the first person's id is 2
+./client verify ../faces/biden2.jpg # verify that the second person's id is 2
 ```
 
 ## Distributed Running
@@ -108,12 +108,14 @@ sudo bash scripts/setup.sh
 #### server
 
 ```sh
-sudo bash scripts/start_client.sh
+sudo bash scripts/start_server.sh
 
 # in qemu
-ip addr add 192.168.1.151/24 dev eth0
-ip link set eth0 up
-ip route add default via 192.168.1.1 dev eth0
+# set ip
+nmcli connection modify "Wired connection 1" ipv4.method manual ipv4.addresses 192.168.1.151/24 ipv4.gateway 192.168.1.1 ipv4.dns "8.8.8.8 8.8.4.4"
+nmcli connection down "Wired connection 1"
+nmcli connection up "Wired connection 1"
+ip addr show eth0
 
 cd ~/penglai-enclave-driver
 insmod penglai.ko
@@ -124,12 +126,14 @@ cd ~/build
 #### client
 
 ```sh
-sudo bash scripts/start_server.sh
+sudo bash scripts/start_client.sh
 
 # in qemu
-ip addr add 192.168.1.152/24 dev eth0
-ip link set eth0 up
-ip route add default via 192.168.1.1 dev eth0
+# set ip
+nmcli connection modify "Wired connection 1" ipv4.method manual ipv4.addresses 192.168.1.152/24 ipv4.gateway 192.168.1.1 ipv4.dns "8.8.8.8 8.8.4.4"
+nmcli connection down "Wired connection 1"
+nmcli connection up "Wired connection 1"
+ip addr show eth0
 
 cd ~/build
 ./client record ../faces/trump1.jpg 1 # record first person with id 1
