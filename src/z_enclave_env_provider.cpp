@@ -428,8 +428,16 @@ extern "C"
 
     std::string make_shared_key(std::string pri_key, std::string in_pub_key)
     {
+        auto print_str = [](int len, const char* name, const void* p) {
+            printf("%s: \n", name);
+            for (int i = 0; i < len; i++) printf("%02x ", ((unsigned char*)p)[i]);
+            printf("\n");
+        };
+        printf("[DEBUG] make_shared_key\n");
+        print_str(pri_key.size(), "pri_key", pri_key.c_str());
+        print_str(in_pub_key.size(), "pub_key", in_pub_key.c_str());
         miracl* mip = mirsys(128, 16);
-        char mem[MR_BIG_RESERVE(1)] = {0};
+        char mem[MR_BIG_RESERVE(4)] = {0};
         char mem_point[MR_ECP_RESERVE(2)] = {0};
 
         big pri, a, b, p;
@@ -630,6 +638,8 @@ print_str(sizeof(*report), "report", report);
         return report;
     }
 
+    extern int (*ecall_proxy_func)(const char* enclave_filename, uint32_t fid, char* in_buf,
+                    int in_buf_size, char* out_buf, int out_buf_size);
 
     extern int (*key_exchange_func)(char *in_key,
                              int in_key_len,
@@ -683,26 +693,6 @@ print_str(sizeof(*report), "report", report);
         SM4_CBC_Decrypt(key, iv, buf, buf_len, buf, buf_len);
     }
 
-    __attribute__((constructor)) void before_main()
-    {
-        sm4_encrypt = _Z_encrypt;
-        sm4_decrypt = _Z_decrypt;
-        key_exchange_func = key_exchange;
-        get_report_func = get_report;
-        is_report_valid_func = is_report_valid;
-        make_key_pair_func = make_key_pair;
-        make_shared_key_func = make_shared_key;
-        pthread_rwlock_init(&(hook_enclave.rwlock), NULL);
-        // g_enclave = (cc_enclave_t *)malloc(sizeof(cc_enclave_t));
-        // if (!g_enclave) {
-        //   // return CC_ERROR_OUT_OF_MEMORY;
-        //   printf("Create g_enclave error\n");
-        //   return;
-        // }
-        // memset(g_enclave, 0, sizeof(*g_enclave));
-        // // z_create_enclave();
-    }
-
     int ecall_proxy(const char* enclave_filename, uint32_t fid, char* in_buf,
                     int in_buf_size, char* out_buf, int out_buf_size)
     {
@@ -744,3 +734,26 @@ print_str(sizeof(*report), "report", report);
         return ret;
     }
 }
+
+struct DteeEnvInit {
+    DteeEnvInit() {
+        sm4_encrypt = _Z_encrypt;
+        sm4_decrypt = _Z_decrypt;
+        key_exchange_func = key_exchange;
+        ecall_proxy_func = ecall_proxy;
+        get_report_func = get_report;
+        is_report_valid_func = is_report_valid;
+        make_key_pair_func = make_key_pair;
+        make_shared_key_func = make_shared_key;
+        pthread_rwlock_init(&(hook_enclave.rwlock), NULL);
+        // g_enclave = (cc_enclave_t *)malloc(sizeof(cc_enclave_t));
+        // if (!g_enclave) {
+        //   // return CC_ERROR_OUT_OF_MEMORY;
+        //   printf("Create g_enclave error\n");
+        //   return;
+        // }
+        // memset(g_enclave, 0, sizeof(*g_enclave));
+        // // z_create_enclave();
+
+    }
+} env_init;

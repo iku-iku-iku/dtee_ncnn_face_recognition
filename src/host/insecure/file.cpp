@@ -51,8 +51,10 @@ extern "C" int get_emb_list(char out_list[sizeof(int) * MAX_EMB_CNT])
 }
 
 extern "C" int read_file(char* in_filename, int in_filename_len, char* out_content, int out_content_len) {
-	std::ifstream ifs(std::string(in_filename, in_filename + in_filename_len), std::ios::binary);
+    std::string filename(in_filename, in_filename + in_filename_len);
+	std::ifstream ifs(filename, std::ios::binary);
 	ifs.read(out_content, out_content_len);
 	return 0;
 }
+
 

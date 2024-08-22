@@ -35,7 +35,7 @@ SECTIONS
   .brk_area :
   {
     __brk_start0 = .;
-    . = . + 1024 * 1024 * 10;
+    . = . + 1024 * 1024 * 8;
     __brk_end = .;
   }
 
@@ -43,7 +43,7 @@ SECTIONS
   .mmap_area :
   {
     __mmap_start0 = .;
-    . = . + 1024 * 1024 * 200;
+    . = . + 1024 * 1024 * 220;
     __mmap_end = .;
   }
   _end = .;

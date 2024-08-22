@@ -152,12 +152,12 @@ int embedding(in_char img[IMG_SIZE], out_char res[EMBEDDING_SIZE])
     ncnn::Net net;
 
 #ifdef __TEE
-    // const int POOL_SIZE = 1024 * 1024 * 50;
-    // auto pool = new BitmapMemoryPool(malloc(POOL_SIZE), POOL_SIZE, 1024 * 16);
-    // // eapp_print("POOL CREATED\n");
-    // net.opt.use_vulkan_compute = false;
-    // net.opt.blob_allocator = pool;
-    // net.opt.workspace_allocator = pool;
+    const int POOL_SIZE = 1024 * 1024 * 50;
+    auto pool = new BitmapMemoryPool(malloc(POOL_SIZE), POOL_SIZE, 1024 * 16);
+    // eapp_print("POOL CREATED\n");
+    net.opt.use_vulkan_compute = false;
+    net.opt.blob_allocator = pool;
+    net.opt.workspace_allocator = pool;
 #endif
     /* const unsigned char *mobilefacenet_param_ptr = mobilefacenet_param; */
     /* const unsigned char *mobilefacenet_bin_ptr = mobilefacenet_bin; */
@@ -214,6 +214,7 @@ retry: {
 float calculate_distance(in_char emb1[EMBEDDING_SIZE],
                          in_char emb2[EMBEDDING_SIZE])
 {
+    eapp_print("CALCULATING DISTANCE\n");
     int emb_len1 = unseal_data_inplace(emb1, EMBEDDING_SIZE);
     int emb_len2 = unseal_data_inplace(emb2, EMBEDDING_SIZE);
 
@@ -262,12 +263,16 @@ int img_verifier(in_char arr[IMG_SIZE])
     int min_dist_id = -1;
 
     int emb_ids[MAX_EMB_CNT];
+    eapp_print("BEGIN GET EMBEDDINGS\n");
     int emb_cnt = get_emb_list((char *)emb_ids);
+    eapp_print("EMB COUNT: %d\n", emb_cnt);
     for (int i = 0; i < emb_cnt; i++) {
         int emb_id = emb_ids[i];
         std::string filename = "emb" + std::to_string(emb_id) + ".bin";
+        eapp_print("READ FILE %s\n", filename.c_str());
         read_file((char *)filename.c_str(), (int)filename.size(),
                   recorded_face_emb, EMBEDDING_SIZE);
+        eapp_print("READED FILE %s\n", filename.c_str());
 
         memcpy(in_face_emb_raw, in_face_emb, EMBEDDING_SIZE);
         float dist = calculate_distance(recorded_face_emb, in_face_emb_raw);
@@ -309,4 +314,5 @@ int img_verifier(in_char arr[IMG_SIZE])
     }
     return -1;
 }
+
 

@@ -8,5 +8,5 @@ extern "C" int get_emb_list(char out_list[sizeof(int) * MAX_EMB_CNT]);
 extern "C" int read_file(char* in_filename, int in_filename_len, char* out_content, int out_content_len);
 
 // int img_recorder(std::array<char, IMG_SIZE> arr, int id);
-
+//
 // int img_verifier(std::array<char, IMG_SIZE> arr);

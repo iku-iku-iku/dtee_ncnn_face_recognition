@@ -15,7 +15,7 @@ TARGET=$(realpath $1)
 mkdir -p $TARGET/build
 
 # 定义Docker镜像名称
-IMAGE_NAME="registry.cn-hangzhou.aliyuncs.com/dteegen/dteegen:1.0.4"
+IMAGE_NAME="registry.cn-hangzhou.aliyuncs.com/dteegen/dteegen:1.0.5"
 
 # 启动Docker容器，并映射generated目录
 docker run -v "$TARGET:/workspace/secGear/examples/generated" \
